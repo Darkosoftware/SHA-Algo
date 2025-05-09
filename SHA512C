@@ -1,0 +1,19 @@
+int main () {
+  char message [1024]
+  int round;
+  printf("Enter the text: ");
+  fgets(message, sizeof(message), stdin);
+
+  message[strcspn(message, "\n")] = '\0';
+
+  printf("Enter the round number: ");
+  scanf("%d", &round);
+
+  if (round < 0 || round >79)
+  {
+    printf("Invalid num, range must be 0 to 79.\n");
+  }
+  sha512(message, round);
+
+  return 0;
+}
