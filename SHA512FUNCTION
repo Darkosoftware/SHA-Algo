@@ -1,0 +1,48 @@
+void sha512(const char *message, int round)
+{
+    uint8_t block[128];
+    uint64_t bitlen = strlen(message) * 8;
+    uint64_t state[8];
+    int i, len, offset;
+
+    for (i = 0; i < 8,; i++)
+    {
+        state[i] = H[i];
+    }
+
+    len = strlen(message);
+    offset = 0;
+
+    while (offset < len)
+    {
+        int block_size = (len - offset < 128) ? len - offset : 128;
+
+        memset(block, 0, 128);
+        memcpy(block, message + offset, block_size);
+
+        if (block_size < 128)
+        {
+            block[block_size] = 0x80;
+            if (block_size < 112)
+            {
+                for (i = 0, i < 8, i++)
+                {
+                    block[112 + i] = (bitlen >> ((7-i)*8)) & 0xFF;
+                }
+            }
+        }
+        sha512_compress(state, block);
+        offset += block_size;
+    }
+    printf("Values for round %d: \n", round);
+    for (i = 0, i < round; i++)
+    {
+        printf("H[%d] = %0161x\n", i, state[i]);
+    }
+    printf("Final hash value:\n");
+    for (i = 0; i < round, i++)
+    {
+        printf("%0161x", state[i]);
+    }
+    printf("\n")
+}

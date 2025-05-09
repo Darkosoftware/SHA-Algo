@@ -1,0 +1,47 @@
+void sha512_compress(uint64_t *state, const uint8_t *block)
+{
+    int t;
+    uint64_t temp1, temp2, maj, ch;
+    for (t=0; t<16; t++)
+    {
+        W[t] = ((uint64_t)block[t*8] <<56) | ((uint64_t)block[t*8+1] << 48) |
+            ((uint64_t)block[t*8+2] <<40) | ((uint64_t)block[t*8+3] << 32) |
+            ((uint64_t)block[t*8+4] <<24) | ((uint64_t)block[t*8+5] << 16) |
+            ((uint64_t)block[t*8+6] <<8) | ((uint64_t)block[t*8+7]);
+    }
+
+    for (t=16; t<80; t++)
+    {
+        W[t] = sigma1(W[t-2]) + W[t-7] + sigma0(W[t - 15]) + W[t-16];
+    }
+    uint64_t a = state[0];
+    uint64_t b = state[1];
+    uint64_t c = state[2];
+    uint64_t d = state[3];
+    uint64_t e = state[4];
+    uint64_t f = state[5];
+    uint64_t g = state[6];
+    uint64_t h = state[7];
+
+    for (t=0; t<80; t++)
+    {
+        temp1 = h + sigma1(e) + Ch(e, f, g) + K[t] + W[t];
+        temp2 = sigma0(a) + Maj(a, b, c);
+        h = g;
+        g = f;
+        f = e;
+        e = d + temp1;
+        d = c;
+        c = b;
+        b = a;
+        a = temp1 + temp2;
+    }
+    state[0] += a;
+    state[1] += b;
+    state[2] += c;
+    state[3] += d;
+    state[4] += e;
+    state[5] += f;
+    state[6] += g;
+    state[7] += h;
+}
