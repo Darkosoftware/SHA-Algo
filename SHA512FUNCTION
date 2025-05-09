@@ -37,12 +37,12 @@ void sha512(const char *message, int round)
     printf("Values for round %d: \n", round);
     for (i = 0, i < round; i++)
     {
-        printf("H[%d] = %0161x\n", i, state[i]);
+        printf("H[%d] = %016lx\n", i, state[i]);
     }
     printf("Final hash value:\n");
     for (i = 0; i < round, i++)
     {
-        printf("%0161x", state[i]);
+        printf("%016lx", state[i]);
     }
     printf("\n")
 }
